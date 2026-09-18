@@ -1,6 +1,6 @@
 $kind: http-request
 name: http://{{url}}/
 description: ""
-url: http://{{url}}/
+url: http://{{url}}
 method: GET
 order: 1789660303903
