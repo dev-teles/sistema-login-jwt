@@ -119,7 +119,7 @@ app.post('/auth/login', async (req, res) => {
       { id: user._id },
       secret
     );
-    res.status(200).json({ message: "Autenticação realizada com sucesso", token });
+    res.status(200).json({ message: "Autenticação realizada com sucesso", token, name: user.name });
   } catch(err) {
     console.log(err);
     res.status(500).json({ message: "Aconteceu um erro no servidor" });
@@ -127,16 +127,20 @@ app.post('/auth/login', async (req, res) => {
 });
 
 // credenciais
-const dbUser = process.env.DB_USER;
-const dbPassword = process.env.DB_PASSWORD;
+const dbURI = process.env.DB_URI;
+
+if (!dbURI) {
+  console.error("ERRO CRÍTICO: A variável DB_URI não foi encontrada no arquivo .env!");
+  process.exit(1);
+}
 
 mongoose
-.connect(`mongodb://${dbUser}:${dbPassword}@ac-u6sgwod-shard-00-00.9k535bm.mongodb.net:27017,ac-u6sgwod-shard-00-01.9k535bm.mongodb.net:27017,ac-u6sgwod-shard-00-02.9k535bm.mongodb.net:27017/?ssl=true&replicaSet=atlas-32umwf-shard-0&authSource=admin&appName=Cluster0`)
+.connect(dbURI)
 .then(() => {
   app.listen(3000, () => {
-    console.log('Server running on port 3000');
+    console.log('Servidor rodando na porta 3000 e conectado ao Banco de Dados!');
   });
 })
 .catch((error) => {
-  console.error('Erro ao conectar ao banco de dados:', error);
+  console.error('Erro ao conectar ao banco de dados:', error.message);
 });

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saudação</title>
+    <link rel="stylesheet" href="css.css">
+</head>
+<body>
+    <h1>Bem-vindo!</h1>
+    
+    <!-- O nome agora aparece automaticamente aqui -->
+    <p>Olá, <span id="nome">Visitante</span>! Seja bem-vindo ao nosso site.</p>
+    
+    <button id="logout-btn" style="background-color: #d9534f; margin-top: 20px;">Sair da Conta</button>
+
+    <script>
+        const spanNome = document.getElementById('nome');
+        
+        // Pega o nome salvo no login
+        const userName = localStorage.getItem('userName');
+        
+        if (userName) {
+            spanNome.textContent = userName;
+        } else {
+            // Se alguém tentar entrar direto na página sem logar, manda de volta pro login
+            window.location.href = "login_2.html";
+        }
+
+        // Botão de sair limpa os dados e retorna ao login
+        document.getElementById('logout-btn').addEventListener('click', () => {
+            localStorage.removeItem('token');
+            localStorage.removeItem('userName');
+            window.location.href = "login_2.html";
+        });
+    </script>
+</body>
+</html>

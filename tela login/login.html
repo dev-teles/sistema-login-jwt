@@ -16,19 +16,15 @@
     </form>
 
     <script>
-        // seleciona o formulário
         const form = document.getElementById('login-form');
 
-        // envio do formulário
         form.addEventListener('submit', async (event) => {
-            event.preventDefault(); // Evita que a página recarregue
+            event.preventDefault();
 
-            // pega os valores
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
 
             try {
-                // envia os dados para a API Node.js
                 const response = await fetch('http://localhost:3000/auth/login', {
                     method: 'POST',
                     headers: {
@@ -40,12 +36,14 @@
                 const data = await response.json();
 
                 if (response.ok) {
-
+                    // Salva o token e o nome do usuário no navegador
                     localStorage.setItem('token', data.token);
+                    localStorage.setItem('userName', data.name);
                     
-                    alert(data.message); // mensagem de sucesso
+                    alert(data.message);
                     
-                    window.location.href = "boas vindas.html";
+                    // CORRIGIDO: Redireciona com hífen (sem erro 404)
+                    window.location.href = "boas-vindas.html";
                 } else {
                     alert(data.message);
                 }
