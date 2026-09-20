@@ -9,11 +9,52 @@
 <body>
     <h1>LOGIN</h1>
 
-    <form>
-        <input type="text" placeholder="Digite seu usuário">
-        <input type="password" placeholder="Digite sua senha">
-        <button> Fazer Login </button>
-
+    <form id="login-form">
+        <input type="email" id="email" placeholder="Digite seu e-mail" required>
+        <input type="password" id="password" placeholder="Digite sua senha" required>
+        <button type="submit"> Fazer Login </button>
     </form>
+
+    <script>
+        // seleciona o formulário
+        const form = document.getElementById('login-form');
+
+        // envio do formulário
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault(); // Evita que a página recarregue
+
+            // pega os valores
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                // envia os dados para a API Node.js
+                const response = await fetch('http://localhost:3000/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+
+                    localStorage.setItem('token', data.token);
+                    
+                    alert(data.message); // mensagem de sucesso
+                    
+                    window.location.href = "boas vindas.html";
+                } else {
+                    alert(data.message);
+                }
+
+            } catch (error) {
+                console.error("Erro na requisição:", error);
+                alert("Erro ao conectar com o servidor.");
+            }
+        });
+    </script>
 </body>
 </html>

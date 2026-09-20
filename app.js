@@ -3,11 +3,13 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const cors = require('cors'); 
 
 const app = express();
 
-// configurar resposta JSON
+// configurar resposta JSON e CORS
 app.use(express.json());
+app.use(cors()); 
 
 // usuario
 const User = require('./models/User');
@@ -16,6 +18,38 @@ const User = require('./models/User');
 app.get('/', (req, res) => {
   res.status(200).json({ message: 'Bem-vindo à API de autenticação!' });
 });
+
+// rota privada
+app.get("/user/:id", checkToken, async (req, res) => {
+  const id = req.params.id;
+
+  //checkagem se o usuário existe
+  const user = await User.findById(id, '-password');
+
+  if (!user){
+    return res.status(404).json({msg: 'Usuário não encontrado'});
+  }
+
+  res.status(200).json({user});
+});
+
+// função checkToken
+function checkToken(req, res, next) {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(" ")[1];
+
+  if (!token) {
+    return res.status(401).json({msg: 'Acesso negado!'});
+  }
+  
+  try {
+    const secret = process.env.SECRET;
+    jwt.verify(token, secret);
+    next();
+  } catch(error) {
+    res.status(400).json({msg: 'Token inválido!'});
+  }
+}
 
 // registrar usuário
 app.post('/auth/register', async (req, res) => {
@@ -78,8 +112,19 @@ app.post('/auth/login', async (req, res) => {
   if (!checkPassword) {
     return res.status(422).json({ message: 'Senha inválida!' });
   }
-});
 
+  try {
+    const secret = process.env.SECRET;
+    const token = jwt.sign(
+      { id: user._id },
+      secret
+    );
+    res.status(200).json({ message: "Autenticação realizada com sucesso", token });
+  } catch(err) {
+    console.log(err);
+    res.status(500).json({ message: "Aconteceu um erro no servidor" });
+  }
+});
 
 // credenciais
 const dbUser = process.env.DB_USER;
