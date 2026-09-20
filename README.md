@@ -4,17 +4,16 @@ Este é um projeto fullstack de um **Sistema de Login e Cadastro de Usuários**,
 
 ---
 
-## 🚀 Funcionalidades
+##  Funcionalidades
 
 - **Cadastro de Usuários (`/auth/register`):** Validação de campos, verificação de e-mails duplicados e criptografia de senha com `bcrypt`.
 - **Login de Usuários (`/auth/login`):** Autenticação segura que retorna um Token JWT e o nome do usuário.
 - **Armazenamento Local (`localStorage`):** O token e o nome do usuário são salvos no navegador para gerenciar a sessão.
 - **Rota Protegida (`/user/:id`):** Exemplo de rota privada verificada por um middleware de token (`checkToken`).
-- **Tela de Boas-Vindas Dinâmica:** Exibe o nome do usuário logado de forma personalizada e possui botão de logout.
 
 ---
 
-## 🛠️ Tecnologias Utilizadas
+##  Tecnologias Utilizadas
 
 ### **Backend:**
 - **Node.js** & **Express** (Framework para API)
@@ -28,22 +27,3 @@ Este é um projeto fullstack de um **Sistema de Login e Cadastro de Usuários**,
 ### **Frontend:**
 - **HTML5 & CSS3** (Interface e estilização)
 - **JavaScript (Vanilla)** (Manipulação do DOM e requisições via `Fetch API`)
-
----
-
-## 📂 Estrutura do Projeto
-
-```text
-sistema-login-jwt/
-│
-├── models/
-│   └── User.js             # Schema do Mongoose para o Usuário
-│
-├── .env                    # Variáveis de ambiente (não versionado)
-├── .gitignore              # Arquivos ignorados pelo Git
-├── app.js (ou app_6.js)    # Arquivo principal do Servidor (API)
-├── package.json            # Dependências do projeto
-│
-├── login_2.html            # Tela de Login com integração via Fetch
-├── boas-vindas.html        # Tela protegida de saudação ao usuário
-└── css.css                 # Estilização padrão das telas
